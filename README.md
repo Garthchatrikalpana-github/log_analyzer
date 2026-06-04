@@ -112,3 +112,5 @@ streamlit run analyzer_ui.py
 3. Install dependencies
 4. Run indexer_ui.py → upload & index app
 5. Run analyzer_ui.py → analyze incidents
+
+# Important Note: update your huggingface token inside llm_client.py
