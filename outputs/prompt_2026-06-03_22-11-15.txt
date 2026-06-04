@@ -1,0 +1,66 @@
+You are an expert site-reliability engineer and debugging assistant.
+
+INCIDENT DETAILS:
+- Number:      INC004
+- Application: mini-commerce
+- User ID:     42
+- Status:      active
+- Reported:    2026-06-03 21:46:59
+- Description: sqlalchemy error
+
+PRIMARY ERROR LINE:
+2026-05-29 12:15:09 | ERROR    | mini-commerce | global_exception_handler:44 | Unhandled exception: path=/products method=GET error=Textual column expression 'Product' should be explicitly declared with text('Product'), or use column('Product') for more specificity
+
+PROCESSED LOGS:
+2026-05-29 12:14:38 | DEBUG    | passlib.registry | register_crypt_handler:296 | registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2026-05-29 12:14:38 | INFO     | mini-commerce | <module>:22 | Database tables verified / created
+2026-05-29 12:14:40 | DEBUG    | passlib.registry | register_crypt_handler:296 | registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2026-05-29 12:14:40 | INFO     | mini-commerce | <module>:22 | Database tables verified / created
+2026-05-29 12:14:40 | INFO     | mini-commerce | startup:57 | Mini Commerce application started — version=1.0.0
+2026-05-29 12:15:08 | DEBUG    | python_multipart.multipart | callback:652 | Calling on_field_start with no data
+2026-05-29 12:15:08 | DEBUG    | python_multipart.multipart | callback:649 | Calling on_field_name with data[0:8]
+2026-05-29 12:15:08 | DEBUG    | python_multipart.multipart | callback:649 | Calling on_field_data with data[9:13]
+2026-05-29 12:15:08 | DEBUG    | python_multipart.multipart | callback:652 | Calling on_field_end with no data
+2026-05-29 12:15:08 | DEBUG    | python_multipart.multipart | callback:652 | Calling on_field_start with no data
+2026-05-29 12:15:08 | DEBUG    | python_multipart.multipart | callback:649 | Calling on_field_name with data[14:22]
+2026-05-29 12:15:08 | DEBUG    | python_multipart.multipart | callback:649 | Calling on_field_data with data[23:30]
+2026-05-29 12:15:08 | DEBUG    | python_multipart.multipart | callback:652 | Calling on_field_end with no data
+2026-05-29 12:15:08 | DEBUG    | python_multipart.multipart | callback:652 | Calling on_end with no data
+2026-05-29 12:15:08 | DEBUG    | mini-commerce.auth | login:43 | POST /login attempt for user=demo
+2026-05-29 12:15:09 | DEBUG    | passlib.handlers.bcrypt | _load_backend_mixin:625 | detected 'bcrypt' backend, version '3.2.2'
+2026-05-29 12:15:09 | DEBUG    | passlib.handlers.bcrypt | _finalize_backend_mixin:406 | 'bcrypt' backend lacks $2$ support, enabling workaround
+2026-05-29 12:15:09 | INFO     | mini-commerce.auth | login:64 | Login successful: username=demo user_id=2
+2026-05-29 12:15:09 | DEBUG    | mini-commerce.products | products:22 | Fetching product list for user_id=2
+2026-05-29 12:15:09 | ERROR    | mini-commerce | global_exception_handler:44 | Unhandled exception: path=/products method=GET error=Textual column expression 'Product' should be explicitly declared with text('Product'), or use column('Product') for more specificity
+Traceback (most recent call last):
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\starlette\middleware\errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\starlette\middleware\sessions.py", line 85, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 62, in __call__
+    await wrap_app_ha
+... [truncated]
+
+
+RELEVANT SOURCE CODE:
+No indexed code available for this application.
+
+---
+Please provide a thorough incident analysis with the following sections:
+
+## 🔍 Root Cause Analysis
+Identify the exact root cause. Reference the specific log lines and code chunks.
+
+## 🧩 Impact Assessment  
+Who / what is affected, and what is the blast radius?
+
+## 🛠️ Immediate Fix
+Step-by-step remediation actions the on-call engineer should take RIGHT NOW.
+
+## 🏗️ Long-Term Recommendations
+Code or architecture changes to prevent recurrence.
+
+## ✅ Verification Steps
+How to confirm the fix is working.
+
+Be precise, actionable, and concise. Use markdown formatting.

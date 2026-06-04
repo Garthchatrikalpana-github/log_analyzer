@@ -1,0 +1,13 @@
+2024-01-15 10:45:01 INFO  [AuthService] Login attempt for user=78 ip=192.168.1.105
+2024-01-15 10:45:02 DEBUG [TokenValidator] Validating JWT token for session=sess-8821
+2024-01-15 10:45:03 DEBUG [DatabasePool] Acquiring connection from pool, available=5
+2024-01-15 10:45:03 INFO  [UserRepository] Fetching user record for user_id=78
+2024-01-15 10:45:04 ERROR [UserRepository] NullPointerException: User profile data is null for user_id=78
+2024-01-15 10:45:04 ERROR [UserRepository] Stack trace:
+    at com.shop.UserRepository.getUserProfile(UserRepository.java:89)
+    at com.shop.AuthService.validateUser(AuthService.java:55)
+    at com.shop.AuthController.login(AuthController.java:33)
+2024-01-15 10:45:05 ERROR [AuthService] Authentication failed for user=78: profile data unavailable
+2024-01-15 10:45:05 WARN  [SecurityMonitor] Failed login recorded for user=78, attempt_count=3
+2024-01-15 10:45:06 INFO  [RateLimiter] Rate limit check: user=78 within threshold
+2024-01-15 10:45:06 INFO  [AuditLog] Auth event: FAILURE user=78 reason=PROFILE_NULL

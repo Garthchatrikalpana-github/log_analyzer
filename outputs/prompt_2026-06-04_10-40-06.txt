@@ -1,0 +1,137 @@
+You are an expert site-reliability engineer and debugging assistant.
+
+INCIDENT DETAILS:
+- Number:      INC004
+- Application: mini-commerce
+- User ID:     42
+- Status:      active
+- Reported:    2026-06-03 21:46:59
+- Description: sqlalchemy error
+
+PROCESSED LOGS:
+... [truncated]
+unction(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\fastapi\routing.py", line 214, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\starlette\concurrency.py", line 39, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func, *args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2518, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+  File "D:\log_analyzer_ex_app\mini-commerce\app\routes\products.py", line 23, in products
+    product_list = db.query("Product").all()
+                   ~~~~~~~~^^^^^^^^^^^
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2962, in query
+    return self._query_cls(entities, self, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\sqlalchemy\orm\query.py", line 277, in __init__
+    self._set_entities(entities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\sqlalchemy\orm\query.py", line 290, in _set_entities
+    coercions.expect(
+    ~~~~~~~~~~~~~~~~^
+        roles.ColumnsClauseRole,
+        ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        post_inspect=True,
+        ^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 396, in expect
+    resolved = impl._literal_coercion(
+        element, argname=argname, **kw
+    )
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 622, in _literal_coercion
+    return self._text_coercion(element, argname, **kw)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\log_analyzer_ex_app\mini-commerce\.venv\Lib\site-packages\sqlalchemy\sql\coercions.py", line 1141, in _text_coercion
+    raise exc.ArgumentError(
+    ...<11 lines>...
+    )
+sqlalchemy.exc.ArgumentError: Textual column expression 'Product' should be explicitly declared with text('Product'), or use column('Product') for more specificity
+
+
+INFRASTRUCTURE HEALTH CHECKS:
+• Inventory Sync Service: ✅  Service running — Simulated: last sync 4 min ago, next in 1 min
+
+
+RELEVANT SOURCE CODE:
+
+--- Chunk 1 (log_app_ex_zip\app\main.py | async function: shutdown (lines 61-62), score=0.4269) ---
+async def shutdown():
+    logger.info("Mini Commerce application shutting down")
+
+
+--- Chunk 2 (log_app_ex_zip\app\main.py | async function: startup (lines 56-57), score=0.385) ---
+async def startup():
+    logger.info("Mini Commerce application started — version=1.0.0")
+
+
+--- Chunk 3 (log_app_ex_zip\app\main.py | async function: global_exception_handler (lines 43-52), score=0.348) ---
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(
+        "Unhandled exception: path=%s method=%s error=%s",
+        request.url.path, request.method, str(exc),
+        exc_info=True,
+    )
+    return JSONResponse(
+        status_code=500,
+        content={"error": "internal_server_error", "detail": str(exc)},
+    )
+
+
+--- Chunk 4 (log_app_ex_zip\requirements.txt (lines 1-12), score=0.3302) ---
+pydantic-settings==2.14.1
+python-dotenv==1.2.2
+python-multipart==0.0.29
+PyYAML==6.0.3
+SQLAlchemy==2.0.50
+starlette==0.38.6
+typing-extensions==4.15.0
+typing-inspection==0.4.2
+uvicorn==0.48.0
+watchfiles==1.2.0
+websockets==16.0
+fastapi==0.115.0
+
+--- Chunk 5 (log_app_ex_zip\app\logging_config.py | function: get_logger (lines 35-37), score=0.3236) ---
+def get_logger(name: str) -> logging.Logger:
+    """Return a child logger scoped to the given module name."""
+    return logging.getLogger(f"mini-commerce.{name}")
+
+
+
+---
+Please provide a thorough incident analysis with the following sections:
+
+## 🔍 Root Cause Analysis
+Identify the exact root cause. Reference the specific log lines and code chunks.
+
+## 🧩 Impact Assessment  
+Who / what is affected, and what is the blast radius?
+
+## 🛠️ Immediate Fix
+Step-by-step remediation actions the on-call engineer should take RIGHT NOW.
+
+## 🏗️ Long-Term Recommendations
+Code or architecture changes to prevent recurrence.
+
+## ✅ Verification Steps
+How to confirm the fix is working.
+
+Be precise, actionable, and concise. Use markdown formatting.

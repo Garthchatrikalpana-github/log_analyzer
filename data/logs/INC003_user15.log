@@ -1,0 +1,12 @@
+2024-01-16 14:22:10 INFO  [CheckoutService] Starting checkout for user=15 cart_id=CART-3310
+2024-01-16 14:22:11 DEBUG [PricingEngine] Computing final price for 3 items
+2024-01-16 14:22:12 INFO  [DiscountService] Applying coupon code=SAVE20 for user=15
+2024-01-16 14:22:13 DEBUG [DatabasePool] Acquiring connection from pool, available=2
+2024-01-16 14:22:14 ERROR [DatabasePool] ConnectionTimeoutException: Unable to acquire DB connection after 30000ms
+2024-01-16 14:22:14 ERROR [CheckoutService] Database connection pool exhausted
+    at com.shop.db.ConnectionPool.acquire(ConnectionPool.java:211)
+    at com.shop.CheckoutService.processCheckout(CheckoutService.java:98)
+    at com.shop.CheckoutController.submit(CheckoutController.java:61)
+2024-01-16 14:22:15 WARN  [HealthMonitor] DB pool utilization at 100%, threshold exceeded
+2024-01-16 14:22:15 ERROR [CheckoutService] Checkout failed for user=15 cart_id=CART-3310
+2024-01-16 14:22:16 INFO  [RetryQueue] Adding checkout CART-3310 to retry queue, attempt=1

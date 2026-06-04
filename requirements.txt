@@ -1,0 +1,13 @@
+streamlit
+sentence-transformers
+qdrant-client
+requests
+transformers==5.9.0
+typer==0.25.1
+typing_extensions==4.15.0
+typing-inspection==0.4.2
+tzdata==2026.2
+urllib3==2.7.0
+uvicorn==0.48.0
+watchdog==6.0.0
+websockets==16.0

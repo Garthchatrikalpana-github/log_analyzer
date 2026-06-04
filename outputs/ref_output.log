@@ -1,0 +1,50 @@
+## 🔍 Root Cause Analysis
+
+The root cause of the incident is a SQLAlchemy error due to an incorrect usage of column names in the query. The query in the `products` route is trying to select all records from the table named `"Product"`, but SQLAlchemy requires explicit text or column declaration.
+
+The specific log lines related to the error are:
+
+```log
+sqlalchemy.exc.ArgumentError: Textual column expression 'Product' should be explicitly declared with text('Product'), or use column('Product') for more specificity
+```
+
+The related code chunk is in the `products` route in the `app/routes/product.py` file:
+
+```python
+product_list = db.query("Product").all()
+```
+
+## 🧩 Impact Assessment
+
+The incident affected the `/products` route in the mini-commerce application. This route is responsible for fetching the list of products and rendering the products page for authenticated users. The impact of the incident was that the products page was not loading correctly, and the application was returning an error instead.
+
+## 🛠️ Immediate Fix
+
+The immediate fix is to update the query in the `products` route to use the correct column name or table alias. Change the query to:
+
+```python
+product_list = db.query("SELECT * FROM products").all()
+```
+
+or
+
+```python
+product_list = db.query(Product).all()
+```
+
+## 🏗️ Long-Term Recommendations
+
+To prevent recurrence of this issue, it's recommended to:
+
+1. Use explicit table and column names in queries to avoid ambiguity.
+2. Use ORM features like `query` and `relationship` instead of raw SQL queries whenever possible.
+3. Review the codebase and update any other similar queries to use explicit table and column names.
+
+## ✅ Verification Steps
+
+To confirm the fix is working, perform the following steps:
+
+1. Restart the application to apply the changes.
+2. Access the `/products` route in a web browser or using a tool like curl.
+3. Verify that the products page loads correctly and displays the list of products.
+4. Check the application logs for any related errors.

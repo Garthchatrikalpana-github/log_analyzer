@@ -1,0 +1,14 @@
+2024-01-15 08:12:01 INFO  [OrderService] Starting order processing for user=42 order_id=ORD-9981
+2024-01-15 08:12:02 INFO  [PaymentGateway] Initiating payment for amount=299.99 currency=USD
+2024-01-15 08:12:03 DEBUG [DatabasePool] Acquiring connection from pool, available=3
+2024-01-15 08:12:04 INFO  [InventoryService] Checking stock for product_id=SKU-442
+2024-01-15 08:12:05 DEBUG [CacheLayer] Cache miss for key=product:SKU-442
+2024-01-15 08:12:06 INFO  [InventoryService] Stock check complete: available=0
+2024-01-15 08:12:07 ERROR [OrderService] InsufficientStockException: Product SKU-442 is out of stock, cannot fulfill order ORD-9981 for user=42
+2024-01-15 08:12:07 ERROR [OrderService] java.lang.RuntimeException: Order processing failed
+    at com.shop.OrderService.processOrder(OrderService.java:142)
+    at com.shop.OrderController.placeOrder(OrderController.java:87)
+    at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+2024-01-15 08:12:08 WARN  [PaymentGateway] Payment authorization rolled back for transaction=TXN-55219
+2024-01-15 08:12:08 INFO  [NotificationService] Sending failure notification to user=42 email=user42@example.com
+2024-01-15 08:12:09 INFO  [AuditLog] Order ORD-9981 marked as FAILED, reason=OUT_OF_STOCK

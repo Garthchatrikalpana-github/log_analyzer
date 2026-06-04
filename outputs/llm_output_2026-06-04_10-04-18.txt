@@ -1,0 +1,47 @@
+## 🔍 Root Cause Analysis
+
+The root cause of the incident is a `sqlalchemy.exc.ArgumentError` raised due to an incorrect textual column expression in the SQL query.
+
+The specific log lines related to the error are:
+
+```
+2026-06-03 21:46:59 [ERROR] [127.0.0.1:5000] sqlalchemy.exc.ArgumentError: Textual column expression 'Product' should be explicitly declared with text('Product'), or use column('Product') for more specificity
+```
+
+## 🧩 Impact Assessment
+
+The impact of this incident is that the application's functionality related to the `Product` entity is affected. This includes but is not limited to:
+
+1. Fetching product data from the database.
+2. Updating product data in the database.
+3. Deleting product data from the database.
+
+## 🛠️ Immediate Fix
+
+To immediately fix the issue, you can update the SQL query to explicitly declare the `Product` column using either `text('Product')` or `column('Product')`.
+
+For example, you can update the following SQL query:
+
+```python
+query = db.query("SELECT * FROM Product")
+```
+
+To:
+
+```python
+query = db.query("SELECT * FROM Product WHERE Product IS NOT NULL")
+```
+
+Or:
+
+```python
+query = db.query("SELECT * FROM Product WHERE text('Product') IS NOT NULL")
+```
+
+## 🏗️ Long-Term Recommendations
+
+To prevent similar issues from occurring in the future, it is recommended to:
+
+1. Review the application's SQL queries to ensure that all column expressions are explicitly declared using either `text()` or `column()`.
+2. Consider using an ORM (Object-Relational Mapping) library like SQLAlchemy to abstract the application's interactions with the database, and to automatically handle the conversion between Python objects and SQL queries.
+3. Implement automated testing and continuous integration (CI) workflows to regularly test the application's functionality and SQL queries, and to automatically detect and alert on any issues or regressions.

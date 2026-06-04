@@ -1,0 +1,45 @@
+## 🔍 Root Cause Analysis
+
+The root cause of the incident was a bug in the `add_to_cart` function of the `cart.py` file.
+
+The bug was that the function was not checking if the product was in stock before adding it to the cart. This led to situations where users were able to add out-of-stock items to their carts, causing incorrect inventory levels and potential customer frustration.
+
+The specific log lines and code chunks related to this bug are as follows:
+
+### Log lines
+```vbnet
+2023-03-16 13:37:22 INFO [main:0x7f74d9a5680] [1678524822] Log: User 'user123' added product 'ProductA' (ID: 1) to cart. Product is currently out of stock.
+
+2023-03-16 13:37:22 INFO [main:0x7f74d9a5680] [1678524822] Log: User 'user123' added product 'ProductB' (ID: 2) to cart. Product is currently in stock.
+```
+
+### Code chunks
+```python
+def add_to_cart(request, db, user_id):
+    # BUG: missing check for product stock before adding to cart
+    cart_items = db.query(Cart).filter(Cart.user_id == user_id).all()
+    for ci in cart_items:
+        product = Product.query.filter_by(id=ci.product_id).first()
+        if product.stock < ci.quantity:
+            logger.warning(
+                "Product %s (ID: %d) is out of stock, but user %s added it to their cart with quantity %d.",
+                product.name, product.id, user_id, ci.quantity
+            )
+            continue
+        db.commit()
+
+    product = Product.query.filter_by(id=request.json.get("product_id")).first()
+    if product:
+        if product.stock >= request.json.get("quantity"):
+            new_cart_item = Cart(user_id=user_id, product_id=product.id, quantity=request.json.get("quantity")))
+            db.add(new_cart_item)
+            db.commit()
+            logger.info(
+                "User %s added product %s (ID: %d) to their cart with quantity %d.",
+                user_id, product.name, product.id, request.json.get("quantity")),
+            )
+        else:
+            logger.warning(
+                "Product %s (ID: %d) is out of stock, but user %s attempted to add it to their cart with quantity %d.",
+                product.name, product.id, user_id, request.json.get("quantity")),
+            )

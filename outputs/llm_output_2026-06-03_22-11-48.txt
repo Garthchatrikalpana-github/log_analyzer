@@ -1,0 +1,38 @@
+## 🔍 Root Cause Analysis
+
+The root cause of the incident is a SQLAlchemy error in the `mini-commerce` application. The error message indicates that a textual column expression 'Product' should be explicitly declared with `text('Product')` or use `column('Product')` for more specificity.
+
+The relevant log lines are:
+
+```
+2026-05-29 12:15:09 | ERROR    | mini-commerce | global_exception_handler:44 | Unhandled exception: path=/products method=GET error=Textual column expression 'Product' should be explicitly declared with text('Product'), or use column('Product') for more specificity
+```
+
+The related code snippet is not provided in the log or the given source code. However, based on the error message, it seems that there is an issue with how the 'Product' column is being referenced in a SQL query.
+
+## 🧩 Impact Assessment
+
+The incident directly affects the `/products` endpoint in the `mini-commerce` application. Users might experience issues when trying to access the product list, and the application may return an error instead of the expected response.
+
+The blast radius of this issue is limited to the affected endpoint and the users trying to access it. However, if left unresolved, it could potentially impact other endpoints or areas of the application that rely on the same database schema or query structure.
+
+## 🛠️ Immediate Fix
+
+To resolve the issue, the developer should update the problematic SQL query to use either `text('Product')` or `column('Product')` when referencing the 'Product' column. This change should be made in the relevant part of the codebase where the query is defined.
+
+## 🏗️ Long-Term Recommendations
+
+To prevent recurrence of similar issues, the development team should:
+
+1. Review the application's database schema and query structure to ensure that all column references are explicitly declared.
+2. Implement a linting or code analysis tool to catch such issues during development.
+3. Regularly review and update the application's dependencies, including SQLAlchemy, to ensure they are up-to-date and compatible with the latest best practices.
+
+## ✅ Verification Steps
+
+To confirm the fix is working, the following steps should be taken:
+
+1. Locate and update the problematic SQL query in the codebase.
+2. Test the `/products` endpoint locally to ensure it returns the expected product list.
+3. Deploy the updated code to the production environment and monitor the application's logs for any related errors.
+4. Verify that the application is functioning correctly for end users, including the `/products` endpoint.

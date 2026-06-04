@@ -1,0 +1,17 @@
+## 🔍 Root Cause Analysis
+
+The root cause of the issue is a SQLAlchemy error related to a textual column expression not being explicitly declared.
+
+The relevant log lines are:
+
+```
+2026-05-29 12:15:09 | ERROR    | mini-commerce | global_exception_handler:44 | Unhandled exception: path=/products method=GET error=Textual column expression 'Product' should be explicitly declared with text('Product'), or use column('Product') for more specificity
+```
+
+## 🧩 Impact Assessment
+
+The impact of this issue is that the application is unable to process GET requests for the /products endpoint, resulting in a 500 Internal Server Error.
+
+## 🛠️ Immediate Fix
+
+To immediately fix the issue, the following steps should be taken

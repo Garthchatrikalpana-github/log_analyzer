@@ -1,0 +1,17 @@
+## 🔍 Root Cause Analysis
+
+The root cause of the error is a missing text declaration for the 'Product' column in a SQL query.
+
+The relevant log lines are:
+
+```
+2026-05-29 12:15:09 | ERROR    | mini-commerce | global_exception_handler:44 | Unhandled exception: path=/products method=GET error=Textual column expression 'Product' should be explicitly declared with text('Product'), or use column('Product') for more specificity
+```
+
+The error message also suggests a potential workaround by using the `column` function instead of the textual column expression.
+
+## 🧩 Impact Assessment
+
+The error affects the 'mini-commerce' application, specifically the '/products' endpoint, when trying to fetch a list of products for a user.
+
+The error

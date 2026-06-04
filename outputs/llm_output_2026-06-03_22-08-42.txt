@@ -1,0 +1,37 @@
+## 🔍 Root Cause Analysis
+
+The root cause of the incident is a SQLAlchemy error in the `mini-commerce` application. The error message indicates that a textual column expression 'Product' should be explicitly declared with `text('Product')` or `column('Product')` for more specificity.
+
+The relevant log lines are:
+
+```log
+2026-05-29 12:15:09 | ERROR    | mini-commerce | global_exception_handler:44 | Unhandled exception: path=/products method=GET error=Textual column expression 'Product' should be explicitly declared with text('Product'), or use column('Product') for more specificity
+```
+
+The error occurs during a GET request to the `/products` endpoint.
+
+The relevant code snippet is not provided in the log, but based on the error message, it seems that there is an issue with how a column named 'Product' is being referenced in a SQL query.
+
+## 🧩 Impact Assessment
+
+The incident affects the `mini-commerce` application, specifically the `/products` endpoint. The impact is that users might experience errors when trying to access product lists. The blast radius is limited to this endpoint and the users who try to access it.
+
+## 🛠️ Immediate Fix
+
+1. Locate the problematic code in the `mini-commerce` application.
+2. Update the SQL query to explicitly declare the 'Product' column using `text('Product')` or `column('Product')`.
+3. Test the fix locally.
+4. Deploy the fix to the production environment.
+
+## 🏗️ Long-Term Recommendations
+
+1. Review the application codebase for similar issues and address them.
+2. Implement a linting tool or static analysis tool to catch such issues during development.
+3. Use an ORM (Object-Relational Mapping) library like SQLAlchemy to simplify database queries and reduce the likelihood of such errors.
+
+## ✅ Verification Steps
+
+1. Verify that the error no longer occurs in the production environment.
+2. Test the `/products` endpoint to ensure it returns the expected product list.
+3. Monitor the application logs for any related errors.
+4. Perform functional and non-functional testing to ensure the application is working as intended.
