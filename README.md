@@ -31,7 +31,7 @@ source .venv/bin/activate
 ## Step 4: Install dependencies
 pip install -r requirements.txt
 
-🧭 2. Run Application Indexer UI
+# 🧭 2. Run Application Indexer UI
 
 This UI is used to upload and index application code into a vector database.
 Start the indexer UI:
@@ -54,12 +54,10 @@ Application name
 ZIP file containing source code
 
 Example:
-
 minicommerce.zip (sample provided)
+
 Indexing process:
-
 Click "Create Index" to:
-
 Extract ZIP file
 Chunk source code
 Generate embeddings
@@ -67,7 +65,7 @@ Store data in Qdrant vector DB
 
 Once completed, the application will be available for analysis.
 
-🧠 3. Run Incident Analyzer UI
+# 🧠 3. Run Incident Analyzer UI
 
 After indexing is complete, stop the previous app and run:
 
@@ -108,7 +106,7 @@ taskkill /f /im python.exe
 Then restart the app:
 
 streamlit run analyzer_ui.py
-🔁 5. Recommended workflow
+# 🔁 5. Recommended workflow
 1. Create data folder
 2. Setup venv
 3. Install dependencies
